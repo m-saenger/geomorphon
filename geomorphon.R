@@ -108,19 +108,22 @@ geomorph <- function(x, flatness.thresh = NA, res = NA, ncell = NA, geomorph.lut
 
 library(raster)
 library(tidyverse)
+library(reshape2)
 
 # Definition
 focal.window.size <- 7
-flatness.thresh <- .5
+flatness.thresh <- 1
 counter <- 1
+verbose <- FALSE
 
 # Data
+data("volcano")
 dat <- volcano/1e2 # Scale z axis to get meaningful slope values
 r <- raster(t(dat), xmn=0, xmx=nrow(dat), ymn=0, ymx=ncol(dat))
 
 # Focal function
 focal.function <- function(x){
-  geomorph(x,  flatness.thresh, res(r), ncell(r), geomorph.lut.num, verbose = T)
+  geomorph(x,  flatness.thresh, res(r), ncell(r), geomorph.lut.num, verbose = verbose)
 }
 # Focal matrix
 focal.matrix <- matrix(1, nrow = focal.window.size, ncol = focal.window.size)
