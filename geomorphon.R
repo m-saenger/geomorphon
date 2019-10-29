@@ -106,42 +106,42 @@ geomorph <- function(x, flatness.thresh = NA, res = NA, ncell = NA, geomorph.lut
 
 ## ------------------------------------- Example --------------------------------------
 
-library(raster)
-library(tidyverse)
-library(reshape2)
-
-# Definition
-focal.window.size <- 7
-flatness.thresh <- 1
-counter <- 1
-verbose <- FALSE
-
-# Data
-data("volcano")
-dat <- volcano/1e2 # Scale z axis to get meaningful slope values
-r <- raster(t(dat), xmn=0, xmx=nrow(dat), ymn=0, ymx=ncol(dat))
-
-# Focal function
-focal.function <- function(x){
-  geomorph(x,  flatness.thresh, res(r), ncell(r), geomorph.lut.num, verbose = verbose)
-}
-# Focal matrix
-focal.matrix <- matrix(1, nrow = focal.window.size, ncol = focal.window.size)
-
-# Apply focal function
-r.volcano.lf <- raster::focal(r, fun = focal.function, w = focal.matrix, pad = T, padValue = NA)
-
-# Melt raster to data frame
-df.lf <- r.volcano.lf %>% 
-  flip(direction = 2) %>% 
-  as.data.frame(xy = T)
-
-ggplot(df.lf, aes(x, y, fill = factor(layer, geomorph.def$num_lf))) +
-  geom_raster() +
-  scale_fill_manual("Landform", values = geomorph.def$colour, labels = geomorph.def$name, drop = F) +
-  coord_cartesian(expand = F) +
-  theme_bw(16) +
-  theme(plot.background = element_rect(colour = "black", size = .3)) +
-  labs(x = "x", y = "y", title = "Volcano Landform Classes")
+# library(raster)
+# library(tidyverse)
+# library(reshape2)
+# 
+# # Definition
+# focal.window.size <- 7
+# flatness.thresh <- 1
+# counter <- 1
+# verbose <- FALSE
+# 
+# # Data
+# data("volcano")
+# dat <- volcano/1e2 # Scale z axis to get meaningful slope values
+# r <- raster(t(dat), xmn=0, xmx=nrow(dat), ymn=0, ymx=ncol(dat))
+# 
+# # Focal function
+# focal.function <- function(x){
+#   geomorph(x,  flatness.thresh, res(r), ncell(r), geomorph.lut.num, verbose = verbose)
+# }
+# # Focal matrix
+# focal.matrix <- matrix(1, nrow = focal.window.size, ncol = focal.window.size)
+# 
+# # Apply focal function
+# r.volcano.lf <- raster::focal(r, fun = focal.function, w = focal.matrix, pad = T, padValue = NA)
+# 
+# # Melt raster to data frame
+# df.lf <- r.volcano.lf %>% 
+#   flip(direction = 2) %>% 
+#   as.data.frame(xy = T)
+# 
+# ggplot(df.lf, aes(x, y, fill = factor(layer, geomorph.def$num_lf))) +
+#   geom_raster() +
+#   scale_fill_manual("Landform", values = geomorph.def$colour, labels = geomorph.def$name, drop = F) +
+#   coord_cartesian(expand = F) +
+#   theme_bw(16) +
+#   theme(plot.background = element_rect(colour = "black", size = .3)) +
+#   labs(x = "x", y = "y", title = "Volcano Landform Classes")
 
 
